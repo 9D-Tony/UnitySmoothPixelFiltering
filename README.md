@@ -10,7 +10,7 @@
 
 There is also a [Godot version](https://github.com/uheartbeast/jitter-free-pixelart-scaling)
 
-Explanation of how the shader works on [Handmade Hero](https://youtu.be/Yu8k7a1hQuU?t=2934)
+Explanation of how the shader works on [Handmade Hero](https://youtu.be/Yu8k7a1hQuU?t=4133)
  
  <br>
  <br>
