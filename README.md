@@ -1,4 +1,17 @@
-# UnitySmoothPixelFiltering
- A unity shader for smooth pixel filtering, based on [CptPotato's](https://github.com/CptPotato/GodotThings) smooth filtering
+# Unity Smooth Pixel Filtering
+ A unity shader for smooth pixel filtering, based on [CptPotato's](https://github.com/CptPotato/GodotThings) smooth pixel filtering
  
- ![](https://media.giphy.com/media/bsGOLC1bqsaZ34Vy8X/giphy.gif)
+ Built using Unity 2020.3.12f1 This should work on older versions of unity and even mobile down to GLES 3.0
+ 
+[Shadertoy example](https://www.shadertoy.com/view/ltBGWc) by d7samurai
+
+There is also a [Godot version](https://github.com/uheartbeast/jitter-free-pixelart-scaling)
+
+Explanation of how the shader works on [Handmade Hero](https://youtu.be/Yu8k7a1hQuU?t=2934)
+ 
+ <br>
+ <br>
+ 
+ An Example
+ 
+ ![](https://media.giphy.com/media/PggcPKT0MYsHl8KjEu/giphy.gif)
