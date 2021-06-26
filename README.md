@@ -1,5 +1,8 @@
 # Unity Smooth Pixel Filtering
- A unity shader for smooth pixel filtering, based on [CptPotato's](https://github.com/CptPotato/GodotThings) smooth pixel filtering
+ A unity example scene of [CptPotato's](https://github.com/CptPotato/GodotThings) smooth pixel filtering
+ It uses a material with a custom JitterFreePixel shader.
+ 
+ To get jitter free pixel art set the filter to bilinear filtering on the imported textures under the advanced tab, create the sprites and apply the JitterFree material.
  
  Built using Unity 2020.3.12f1 This should work on older versions of unity and even mobile down to GLES 3.0
  
