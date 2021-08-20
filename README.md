@@ -7,6 +7,8 @@
  
  Built using Unity 2020.3.12f1 I have not tested it with older versions of unity so it may not work. Should work on mobile down to GLES 3.0
  
+ Background artwork by [Luis Zuno](https://opengameart.org/content/gothicvania-town)
+ 
 [Shadertoy example](https://www.shadertoy.com/view/ltBGWc) by d7samurai
 
 There is also a [Godot version](https://github.com/uheartbeast/jitter-free-pixelart-scaling)
