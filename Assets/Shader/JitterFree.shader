@@ -1,92 +1,87 @@
-Shader "Unlit/JitterFreeShader"
+Shader "Sprites/JitterFreeUnlit"
 {
     Properties
     {
-        _MainTex("Sprite Texture", 2D) = "white" {}
+        [PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
+        _Color("Tint", Color) = (1,1,1,1)
     }
-    SubShader
-    {
-        Tags {"Queue" = "Transparent" "RenderType" = "Transparent" }
-        LOD 100
-
-        Pass
+        SubShader
         {
-            Blend SrcAlpha OneMinusSrcAlpha
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-            // make fog work
-            #pragma multi_compile_fog
-
-            #include "UnityCG.cginc"
-
-            struct appdata
+            Tags
             {
-                float4 vertex : POSITION;
-                fixed4 color : COLOR;
-                float2 uv : TEXCOORD0;
-            };
-
-            struct FragOut
-            {
-                float4 color : COLOR;
-            };  
-
-            struct v2f
-            {
-                float2 uv : TEXCOORD0;
-                fixed4 color : COLOR;
-                UNITY_FOG_COORDS(1)
-                float4 vertex : SV_POSITION;
-            };
-
-            sampler2D _MainTex;
-			float4 _MainTex_TexelSize;
-            float4 _MainTex_ST;
-			
-			float4 texturePointSmooth(sampler2D tex, float2 uvs) {
-			    float2 size;
-			    size.x = _MainTex_TexelSize.z;
-			    size.y = _MainTex_TexelSize.w;
-			 
-			    float2 pixel = float2(1.0,1.0) / size;
-			
-			    uvs -= pixel * float2(0.5,0.5);
-			    float2 uv_pixels = uvs * size;
-			    float2 delta_pixel = frac(uv_pixels) - float2(0.5,0.5);
-			
-			    float2 ddxy = fwidth(uv_pixels);
-			    float2 mip = log2(ddxy) - 0.5;
-			
-			    float2 clampedUV = uvs + (clamp(delta_pixel / ddxy, 0.0, 1.0) - delta_pixel) * pixel;
-			
-			    float scale = exp2(min(mip.x, mip.y));
-			
-			    return tex2Dlod(tex, float4(clampedUV,0, min(mip.x, mip.y)));
-			}
-
-            v2f vert (appdata v)
-            {
-                v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                o.color = v.color;
-                return o;
+                "Queue" = "Transparent"
+                "IgnoreProjector" = "True"
+                "RenderType" = "Transparent"
+                "PreviewType" = "Plane"
+                "CanUseSpriteAtlas" = "True"
             }
 
-            fixed4 frag(v2f i) : SV_Target
+            Blend One OneMinusSrcAlpha
+
+            Pass
             {
-                // sample the texture
-				fixed4 col = texturePointSmooth(_MainTex, i.uv);
-                col.a = i.color.a;
-                return col;
-				
-				
-				
-				
+                Blend SrcAlpha OneMinusSrcAlpha
+                CGPROGRAM
+                #pragma vertex vert
+                #pragma fragment frag
+                #include "UnityCG.cginc"
+
+                struct appdata_t
+                {
+                    float4 vertex : POSITION;
+                    fixed4 color : COLOR;
+                    float2 texcoord : TEXCOORD0;
+                };
+
+                struct v2f
+                {
+                    float4 vertex : SV_POSITION;
+                    float2 texcoord : TEXCOORD0;
+                    fixed4 color : COLOR;
+                };
+
+                fixed4 _Color;
+
+                v2f vert(appdata_t IN)
+                {
+                    v2f OUT;
+                    OUT.vertex = UnityObjectToClipPos(IN.vertex);
+                    OUT.texcoord = IN.texcoord;
+                    OUT.color = IN.color * _Color;
+                    return OUT;
+                }
+
+                sampler2D _MainTex;
+                float4 _MainTex_TexelSize;
+                float4 _MainTex_ST;
+
+                float4 texturePointSmooth(sampler2D tex, float2 uvs)
+                {
+                    float2 size;
+                    size.x = _MainTex_TexelSize.z;
+                    size.y = _MainTex_TexelSize.w;
+
+                    float2 pixel = float2(1.0,1.0) / size;
+
+                    uvs -= pixel * float2(0.5,0.5);
+                    float2 uv_pixels = uvs * size;
+                    float2 delta_pixel = frac(uv_pixels) - float2(0.5,0.5);
+
+                    float2 ddxy = fwidth(uv_pixels);
+                    float2 mip = log2(ddxy) - 0.5;
+
+                    float2 clampedUV = uvs + (clamp(delta_pixel / ddxy, 0.0, 1.0) - delta_pixel) * pixel;
+                    return tex2Dlod(tex, float4(clampedUV,0, min(mip.x, mip.y)));
+                }
+
+                fixed4 frag(v2f IN) : SV_Target
+                {
+                    fixed4 c = texturePointSmooth(_MainTex, IN.texcoord) * IN.color;
+                    c.rgb *= c.a;
+                    return c;
+                }
+
+                ENDCG
             }
-			
-            ENDCG
         }
-    }
 }
