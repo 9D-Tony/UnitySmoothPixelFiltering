@@ -77,7 +77,6 @@ Shader "Sprites/JitterFreeUnlit"
                 fixed4 frag(v2f IN) : SV_Target
                 {
                     fixed4 c = texturePointSmooth(_MainTex, IN.texcoord) * IN.color;
-                    c.rgb *= c.a;
                     return c;
                 }
 
