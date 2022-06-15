@@ -16,6 +16,9 @@ Shader "Sprites/JitterFreeUnlit"
                 "CanUseSpriteAtlas" = "True"
             }
 
+            Cull Off
+            Lighting Off
+            ZWrite Off
             Blend One OneMinusSrcAlpha
 
             Pass
