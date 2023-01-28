@@ -60,20 +60,14 @@ Shader "Sprites/JitterFreeUnlit"
 
                 float4 texturePointSmooth(sampler2D tex, float2 uvs)
                 {
-                    float2 size;
-                    size.x = _MainTex_TexelSize.z;
-                    size.y = _MainTex_TexelSize.w;
-
-                    float2 pixel = float2(1.0,1.0) / size;
-
-                    uvs -= pixel * float2(0.5,0.5);
-                    float2 uv_pixels = uvs * size;
+                    uvs -= float2(_MainTex_TexelSize.x,_MainTex_TexelSize.y) * float2(0.5,0.5);
+                    float2 uv_pixels = uvs * float2(_MainTex_TexelSize.z,_MainTex_TexelSize.w);
                     float2 delta_pixel = frac(uv_pixels) - float2(0.5,0.5);
 
                     float2 ddxy = fwidth(uv_pixels);
                     float2 mip = log2(ddxy) - 0.5;
 
-                    float2 clampedUV = uvs + (clamp(delta_pixel / ddxy, 0.0, 1.0) - delta_pixel) * pixel;
+                    float2 clampedUV = uvs + (clamp(delta_pixel / ddxy, 0.0, 1.0) - delta_pixel) * float2(_MainTex_TexelSize.x,_MainTex_TexelSize.y);
                     return tex2Dlod(tex, float4(clampedUV,0, min(mip.x, mip.y)));
                 }
 
